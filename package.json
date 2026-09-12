@@ -1,0 +1,46 @@
+{
+  "name": "@operstack/mcp",
+  "version": "0.1.0",
+  "description": "MCP server that lets Claude, Cursor and any MCP client measure a site the way a search engine and an AI read it: AI visibility score, llms.txt health, the sixteen content gates, and a full public-signal audit. Free data only, no account, nothing stored.",
+  "type": "module",
+  "license": "MIT",
+  "author": "OperStack",
+  "homepage": "https://oper-stack.com/products/mcp/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oper-stack/mcp-server.git"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "seo",
+    "aeo",
+    "geo",
+    "llms-txt",
+    "ai-visibility",
+    "claude",
+    "cursor",
+    "site-audit"
+  ],
+  "bin": {
+    "operstack-mcp": "bin/operstack-mcp.mjs"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node bin/operstack-mcp.mjs",
+    "test": "node src/test-tools.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@operstack/audit": "^0.13.1",
+    "zod": "^4.6.2"
+  }
+}
