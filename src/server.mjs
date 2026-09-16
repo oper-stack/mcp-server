@@ -22,7 +22,7 @@ import { existsSync } from 'node:fs';
 import { collect, localiseChecks, AREAS_RU } from '@operstack/audit';
 import { checkLlms, normaliseSite } from './llms.mjs';
 
-export const VERSION = '0.1.0';
+export const VERSION = '0.2.0';
 
 const text = (value) => ({ content: [{ type: 'text', text: typeof value === 'string' ? value : JSON.stringify(value, null, 2) }] });
 const fail = (message) => ({ content: [{ type: 'text', text: message }], isError: true });

@@ -1,6 +1,6 @@
 {
   "name": "@operstack/mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "MCP server that lets Claude, Cursor and any MCP client measure a site the way a search engine and an AI read it: AI visibility score, llms.txt health, the sixteen content gates, and a full public-signal audit. Free data only, no account, nothing stored.",
   "type": "module",
   "license": "MIT",
