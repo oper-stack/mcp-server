@@ -89,7 +89,12 @@ export function buildServer() {
       },
     },
     async ({ url, maxLinks = 20 }) => {
-      try { return text(await checkLlms(url, { maxLinks })); }
+      // Адрес приводим к корню, как и в остальных инструментах. Без этого «oper-stack.com»,
+      // адрес с путём и даже прямая ссылка на сам файл давали «llms.txt не найден» на сайте,
+      // где файл есть. Человек пишет адрес как придётся, и это наша работа, а не его.
+      let root;
+      try { root = normaliseSite(url); } catch (e) { return fail(e.message); }
+      try { return text(await checkLlms(root, { maxLinks })); }
       catch (e) { return fail(e.message); }
     },
   );

@@ -7,6 +7,7 @@
  *   npm test
  *   npm test -- --live     ещё и сходить на живой сайт (медленнее, нужна сеть)
  */
+import { normaliseSite } from './llms.mjs';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { resolve, dirname } from 'node:path';
@@ -67,6 +68,16 @@ async function main() {
   }
 
   await client.close();
+  // ---- адрес, написанный по-человечески
+  // 16.09.2026 живой пользователь сообщил, что check_llms_txt отвечает «файла нет» на сайте, где
+  // файл есть: для этого инструмента адрес не приводился к корню, хотя для остальных приводился.
+  // Люди пишут адрес как придётся, и разобрать написание это наша работа, а не их.
+  for (const raw of ['oper-stack.com', 'www.oper-stack.com', 'https://oper-stack.com/products/gates/',
+                     'https://oper-stack.com/llms.txt', 'HTTPS://Oper-Stack.com']) {
+    const root = normaliseSite(raw);
+    ok(`адрес приводится к корню: ${raw}`, root === 'https://oper-stack.com' || root === 'https://www.oper-stack.com', root);
+  }
+
   if (failed) { console.error(`\n${failed} проверок упало`); process.exit(1); }
   console.log('\nсервер отвечает как положено');
 }
