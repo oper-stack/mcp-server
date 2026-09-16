@@ -10,6 +10,7 @@
 import { normaliseSite } from './llms.mjs';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -68,6 +69,16 @@ async function main() {
   }
 
   await client.close();
+  // ---- главный балл в ответе
+  // До 16.09.2026 устанавливаемый пакет отдавал шесть областей из десяти и ни разу не называл
+  // число 0-100, то самое, что человек видит на нашей странице. Сопоставить одно с другим было
+  // нельзя. Число берётся из той же проверки, расхождений нет: сверено на шести живых сайтах.
+  const serverSrc = readFileSync(resolve(ROOT, 'src/server.mjs'), 'utf8');
+  ok('ответ audit_site называет главный балл', /score: overall \?\?/.test(serverSrc));
+  ok('и объясняет, что это тот же балл, что на сайте', /scoreMeans:/.test(serverSrc)
+    && /бесплатная проверка на oper-stack\.ru/.test(serverSrc)
+    && /free check on oper-stack\.com/.test(serverSrc));
+
   // ---- адрес, написанный по-человечески
   // 16.09.2026 живой пользователь сообщил, что check_llms_txt отвечает «файла нет» на сайте, где
   // файл есть: для этого инструмента адрес не приводился к корню, хотя для остальных приводился.
