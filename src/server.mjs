@@ -33,10 +33,23 @@ function summarise(audit, lang) {
   const checks = ru ? localiseChecks(audit.checks || [], 'ru') : (audit.checks || []);
   const areaName = (k) => (ru ? (AREAS_RU[k] || k) : k);
   const open = checks.filter((c) => c.status === 'bad' || c.status === 'warn');
+  /*
+   * Главный балл в ответе обязателен.
+   *
+   * До 16.09.2026 здесь были только шесть областей из десяти, а число 0-100 отсутствовало. Это
+   * то самое число, которое человек видит на нашей странице и в удалённом MCP, и без него он не
+   * мог сопоставить ответ инструмента с тем, что показывает сайт. Число то же самое: аудит берёт
+   * его из той же проверки, проверено на шести живых сайтах, расхождений ноль.
+   */
+  const overall = typeof audit.overall === 'object' ? audit.overall?.score : audit.overall;
   return {
     site: audit.meta?.site,
     reachable: audit.meta?.reachable !== false,
     collectedAt: audit.meta?.collectedAt,
+    score: overall ?? (ru ? 'не измерялось' : 'not measured'),
+    scoreMeans: ru
+      ? 'Это тот же балл от 0 до 100, что показывает бесплатная проверка на oper-stack.ru. Шесть областей ниже это разбор того же сайта по другим вопросам, каждая из десяти.'
+      : 'This is the same 0 to 100 score the free check on oper-stack.com shows. The six areas below look at the same site from other angles, each out of ten.',
     pagesSampled: (audit.sample || []).filter((p) => p.title !== undefined).length,
     scores: Object.fromEntries(Object.entries(audit.scores || {}).map(([k, v]) => [areaName(k), v ?? (ru ? 'не измерялось' : 'not measured')])),
     failing: checks.filter((c) => c.status === 'bad').map((c) => ({ check: c.label, found: c.value })),
