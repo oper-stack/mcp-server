@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/oper-stack/brand/main/og-mcp.png" alt="OperStack mcp-server" width="100%">
+
 # @operstack/mcp
 
 Let Claude, Cursor or any MCP client measure a site the way a search engine and an AI actually read it.
